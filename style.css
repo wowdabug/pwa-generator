@@ -1,0 +1,40 @@
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+body {
+    background: #000000;
+    box-sizing: border-box;
+    padding: 10px;
+    height: 100%;
+}
+
+#container {
+    background: #111111;
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-family: arial;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+#container input {
+    margin: 4px;
+    border: 1px solid #111111;
+}
+
+#container input[type="text"] {
+    margin: 4px;
+    border-radius: 4px;
+    color: black;
+    background: white;
+}
+
+#container input[type="file"] {
+    margin: 4px;
+    color: white;
+}

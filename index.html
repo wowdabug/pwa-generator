@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PWA Generator</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="container">
+            <label for="name">Name</label>
+            <input type="text" id="name" value="Default">
+            <br>
+            <label for="short-name">Short Name</label>
+            <input type="text" id="short-name" value="default">
+            <br>
+            <label for="version">Version</label>
+            <input type="text" id="version" value="0">
+            <br>
+            <label for="base-url">Base URL</label>
+            <input type="text" id="base-url" value="./">
+            <br>
+            <label for="icon">Icon</label>
+            <input type="file" accept="image/png" id="icon">
+            <br>
+            <button id="generate-template">Generate Template</button>
+            <script src="lib/jszip.js"></script>
+            <p id="status"></p>
+            <script src="main.js"></script>
+        </div>
+    </body>
+</html>
