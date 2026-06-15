@@ -214,10 +214,3 @@ async function generateTemplate() {
 
     reset();
 }
-
-function test() {
-    applyDefaultValues();
-    console.log(generateSw());
-}
-
-test();
