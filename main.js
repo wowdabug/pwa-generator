@@ -1,5 +1,7 @@
 "use strict";
 
+const g_files = ["main.js", "style.css"];
+
 const g_shortName = document.getElementById("short-name");
 const g_name = document.getElementById("name");
 const g_favicon = document.getElementById("favicon");
@@ -75,7 +77,6 @@ function generateManifest() {
     const displayValue = g_display.value;
     const themeColorValue = g_themeColor.value;
     const backgroundColorValue = g_backgroundColor.value;
-    
     let manifest = `{
 	"short_name": "${shortNameValue}",
 	"name": "${nameValue}",
@@ -131,17 +132,21 @@ function generateIndex() {
 function generateSw() {
     const startUrlValue = g_startUrl.value;
     const cacheNameValue = g_cacheName.value;
-    return `const CACHE_NAME = "${cacheNameValue}";
+    let sw = `const CACHE_NAME = "${cacheNameValue}";
 
 const FILES = [
-    "${startUrlValue}",
-    "${startUrlValue}favicon-192x192.png",
-    "${startUrlValue}favicon-512x512.png",
-    "${startUrlValue}manifest.json",
+`;
+    for (const faviconSize of g_faviconSizes) {
+        sw += `    "${startUrlValue}favicon-${faviconSize}x${faviconSize}.png",
+`;
+    }
+    for (const file of g_files) {
+        sw += `    "${startUrlValue}${file}",
+`;
+    }
+    sw += `    "${startUrlValue}manifest.json",
     "${startUrlValue}sw.js",
     "${startUrlValue}index.html",
-    "${startUrlValue}style.css",
-    "${startUrlValue}main.js"
 ];
 
 self.addEventListener("install", event => {
@@ -156,7 +161,8 @@ self.addEventListener("fetch", event => {
         caches.match(event.request)
             .then(response => response || fetch(event.request))
     );
-});`
+});`;
+    return sw;
 }
 
 function resizeImg(imgBlob, width, height) {
@@ -208,3 +214,10 @@ async function generateTemplate() {
 
     reset();
 }
+
+function test() {
+    applyDefaultValues();
+    console.log(generateSw());
+}
+
+test();
