@@ -89,24 +89,24 @@ generateTemplateEl.addEventListener("click", () => {
 
 function generateManifest() {
     return `{
-    "name": "${name}",
-    "short_name": "${shortName}",
-    "start_url": "${baseUrl}",
-    "display": "standalone",
-    "background_color": "#000000",
-    "theme_color": "#000000",
-    "icons": [
-        {
-            "src": "icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
+	"short_name": "${shortName}",
+	"name": "${name}",
+	"icons": [
+	{
+		"src": "/favicon-192x192.png",
+		"sizes": "192x192",
+		"type": "image/png"
+	},
+	{
+		"src": "/favicon-512x512.png",
+		"sizes": "512x512",
+		"type": "image/png"
+	}
+	],
+	"start_url": "${baseUrl}",
+	"display": "standalone",
+	"theme_color": "black",
+	"background_color": "white"
 }`
 }
 
@@ -136,8 +136,8 @@ function generateSw() {
 
 const FILES = [
     "${baseUrl}",
-    "${baseUrl}icon-192x192.png",
-    "${baseUrl}icon-512x512.png",
+    "${baseUrl}favicon-192x192.png",
+    "${baseUrl}favicon-512x512.png",
     "${baseUrl}manifest.json",
     "${baseUrl}sw.js",
     "${baseUrl}index.html",
@@ -182,8 +182,8 @@ async function generateTemplate() {
     status.textContent = "loading";
 
     const zip = new JSZip();
-    zip.file("icon-192x192.png", await resizeImg(icon, 192, 192));
-    zip.file("icon-512x512.png", await resizeImg(icon, 512, 512));
+    zip.file("favicon-192x192.png", await resizeImg(icon, 192, 192));
+    zip.file("favicon-512x512.png", await resizeImg(icon, 512, 512));
     zip.file("manifest.json", generateManifest());
     zip.file("sw.js", generateSw());
     zip.file("index.html", generateIndex());
