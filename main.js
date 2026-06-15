@@ -9,7 +9,7 @@ const g_themeColor = document.getElementById("theme-color");
 const g_backgroundColor = document.getElementById("background-color");
 const g_cacheName = document.getElementById("cache-name");
 
-const g_faviconSizes = [192, 512, 545];
+const g_faviconSizes = [192, 512];
 let g_faviconFile = null;
 
 const g_submit = document.getElementById("submit");
