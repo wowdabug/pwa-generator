@@ -6,24 +6,37 @@
     </head>
     <body>
         <div id="container">
-            <form id="template-form">
-                <label for="name">Name</label>
-                <input type="text" id="name" value="Default">
-                <br>
-                <label for="short-name">Short Name</label>
-                <input type="text" id="short-name" value="default">
-                <br>
-                <label for="version">Version</label>
-                <input type="text" id="version" value="0">
-                <br>
-                <label for="base-url">Base URL</label>
-                <input type="text" id="base-url" value="./">
-                <br>
-                <label for="icon">Icon</label>
-                <input type="file" accept="image/png" id="icon">
-                <br>
-                <button id="generate-template">Generate Template</button>
-            </form>
+            <label for="short-name">Short Name</label>
+            <input type="text" id="short-name" placeholder="Default">
+            <br>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Default">
+            <br>
+            <label for="favicon">Favicon</label>
+            <input type="file" id="favicon" accept="image/png">
+            <br>
+            <label for="start-url">Start URL</label>
+            <input type="text" id="start-url" placeholder="./">
+            <br>
+            <label for="display">Display</label>
+            <select id="display">
+                <option value="">--Please choose an option--</option>
+                <option value="fullscreen">Fullscreen</option>
+                <option value="standalone">Standalone</option>
+                <option value="minimal-ui">Minimal UI</option>
+                <option value="browser">Browser</option>
+            </select>
+            <br>
+            <label for="start-url">Theme Color</label>
+            <input type="text" id="theme-color" placeholder="#000000">
+            <br>
+            <label for="start-url">Background Color</label>
+            <input type="text" id="background-color" placeholder="#ffffff">
+            <br>
+            <label for="cache-name">Cache Name</label>
+            <input type="text" id="cache-name" placeholder="default-v0">
+            <br>
+            <button id="submit" type="submit">Generate Template</button>
             <p id="status"></p>
             <script src="lib/jszip.js"></script>
             <script src="main.js"></script>

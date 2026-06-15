@@ -1,96 +1,58 @@
 "use strict";
 
-const nameEl = document.getElementById("name");
-const shortNameEl = document.getElementById("short-name");
-const versionEl = document.getElementById("version");
-const baseUrlEl = document.getElementById("base-url");
-const iconEl = document.getElementById("icon");
-
-const generateTemplateEl = document.getElementById("generate-template");
-const status = document.getElementById("status");
-
-let name = null;
-let shortName = null;
-let version = null;
-let baseUrl = null;
-let icon = null;
-
 const inputNames = [
+    "short-name",
     "name",
-    "short name",
-    "version",
-    "base url",
-    "icon"
+    "favicon",
+    "start-url",
+    "display",
+    "theme-color",
+    "background-color",
+    "cache-name"
 ];
 
-iconEl.addEventListener("change", (event) => {
-    const files = event.target.files;
+const els = new Map();
+const submitBtn = document.getElementById("submit");
+const status = document.getElementById("status");
 
-    if (files.length === 1) {
-        const file = files[0];
-        icon = file;
+let favicon = null;
+
+for (let i = 0; i < inputNames.length; ++i) {
+    els.set(inputNames[i], document.getElementById(inputNames[i]));
+}
+
+els.get("favicon").addEventListener("change", (event) => {
+    if (event.target.files.length === 1) {
+        favicon = event.target.files[0];
     }
 });
 
-generateTemplateEl.addEventListener("click", () => {
-    name = nameEl.value;
-    shortName = shortNameEl.value;
-    version = versionEl.value;
-    baseUrl = baseUrlEl.value;
-
-    const generate = false;
-
-    if (generate) {
-        name = name || "default";
-        shortName = shortName || name.slice(0, 10);
-        version = version || Math.floor(Math.random() * 100);
-        baseUrl = baseUrl || "/";
-
-        generateTemplate();
-    } else {
-        const missingInput = [];
-        if (!name) {
-            missingInput.push(0);
-        }
-
-        if (!shortName) {
-            missingInput.push(1);
-        }
-
-        if (!version) {
-            missingInput.push(2);
-        }
-
-        if (!baseUrl) {
-            missingInput.push(3);
-        }
-
-        if (!icon) {
-            missingInput.push(4);
-        }
-
-        if (missingInput.length === 0) {
-            generateTemplate();
+submitBtn.addEventListener("click", () => {
+    const favicon = els.get("favicon").value;
+    const display = els.get("display").value;
+    if (!favicon || !display) {
+        if (!favicon) {
+            if (!display) {
+                setStatus("Please upload favicon and choose display mode");
+            } else {
+                setStatus("Please upload favicon");
+            }
         } else {
-            status.textContent = "Please enter ";
-            for (let i = 0; i < missingInput.length - 1; ++i) {
-                status.textContent += inputNames[missingInput[i]];
-                status.textContent += ", "
-            }
-
-            if (missingInput.length > 1) {
-                status.textContent += "and ";
-            }
-
-            status.textContent += inputNames[missingInput[missingInput.length - 1]] + ".";
+            setStatus("Please choose display mode");
         }
+    } else {
+        generateTemplate();
     }
 });
+
+function setStatus(text) {
+    status.textContent = text;
+}
 
 function generateManifest() {
     return `{
-	"short_name": "${shortName}",
-	"name": "${name}",
+	"short_name": "${els.get("short-name")}",
+	"name": "${els.get("name")}",
 	"icons": [
 	{
 		"src": "/favicon-192x192.png",
@@ -103,27 +65,28 @@ function generateManifest() {
 		"type": "image/png"
 	}
 	],
-	"start_url": "${baseUrl}",
-	"display": "standalone",
-	"theme_color": "black",
-	"background_color": "white"
+	"start_url": "${els.get("start-url")}",
+	"display": "${els.get("display")}",
+	"theme_color": "${els.get("theme-color")}",
+	"background_color": "${els.get("background-color")}"
 }`
 }
 
 function generateIndex() {
+    const startUrl = els.get("start-url");
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name}</title>
+    <title>${els.get("name")}</title>
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <script>
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("${baseUrl}sw.js", {
-                scope: "${baseUrl}" 
+            navigator.serviceWorker.register("${startUrl}sw.js", {
+                scope: "${startUrl}" 
             });
         }
     </script>
@@ -132,17 +95,18 @@ function generateIndex() {
 }
 
 function generateSw() {
-    return `const CACHE_NAME = "${shortName}-${version}";
+    const startUrl = els.get("start-url");
+    return `const CACHE_NAME = "${els.get("cache-name")}";
 
 const FILES = [
-    "${baseUrl}",
-    "${baseUrl}favicon-192x192.png",
-    "${baseUrl}favicon-512x512.png",
-    "${baseUrl}manifest.json",
-    "${baseUrl}sw.js",
-    "${baseUrl}index.html",
-    "${baseUrl}style.css",
-    "${baseUrl}main.js"
+    "${startUrl}",
+    "${startUrl}favicon-192x192.png",
+    "${startUrl}favicon-512x512.png",
+    "${startUrl}manifest.json",
+    "${startUrl}sw.js",
+    "${startUrl}index.html",
+    "${startUrl}style.css",
+    "${startUrl}main.js"
 ];
 
 self.addEventListener("install", event => {
@@ -179,11 +143,11 @@ function resizeImg(imgBlob, width, height) {
 }
 
 async function generateTemplate() {
-    status.textContent = "loading";
+    status.textContent = "Loading...";
 
     const zip = new JSZip();
-    zip.file("favicon-192x192.png", await resizeImg(icon, 192, 192));
-    zip.file("favicon-512x512.png", await resizeImg(icon, 512, 512));
+    zip.file("favicon-192x192.png", await resizeImg(favicon, 192, 192));
+    zip.file("favicon-512x512.png", await resizeImg(favicon, 512, 512));
     zip.file("manifest.json", generateManifest());
     zip.file("sw.js", generateSw());
     zip.file("index.html", generateIndex());
@@ -197,7 +161,7 @@ async function generateTemplate() {
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = blobUrl;
-    link.download = `${shortName}.zip`;
+    link.download = `${els.get("name")}.zip`;
 
     document.body.appendChild(link)
     link.click();
@@ -205,17 +169,11 @@ async function generateTemplate() {
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl)
 
-    name = null;
-    shortName = null;
-    version = null;
-    baseUrl = null;
-    icon = null;
+    favicon = null;
 
-    nameEl.value = "";
-    shortNameEl.value = "";
-    versionEl.value = "";
-    baseUrlEl.value = "";
-    iconEl.value = "";
+    for (let i = 0; i < inputNames.length; ++i) {
+        els.get(inputNames[i]).value = "";
+    }
     
     status.textContent = "";
 }

@@ -22,19 +22,33 @@ body {
     box-sizing: border-box;
 }
 
+#container label {
+    display: block;
+}
+
 #container input {
     margin: 4px;
     border: 1px solid #111111;
 }
 
 #container input[type="text"] {
-    margin: 4px;
     border-radius: 4px;
     color: black;
     background: white;
 }
 
-#container input[type="file"] {
+#container select {
+    border-radius: 4px;
+    color: black;
+    background: white;
     margin: 4px;
+    border: 1px solid #111111;
+}
+
+#container input[type="file"] {
     color: white;
+}
+
+#container button {
+    margin: 4px;
 }
