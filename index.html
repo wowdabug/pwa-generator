@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>PWA Generator</title>
+		<link rel="manifest" href="manifest.json">
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+		<script>
+			if ("serviceWorker" in navigator) {
+				navigator.serviceWorker.register("./sw.js", {
+					scope: "./" 
+				});
+			}
+		</script>
         <div id="container">
             <label for="short-name">Short Name</label>
             <input type="text" id="short-name" placeholder="Default">
