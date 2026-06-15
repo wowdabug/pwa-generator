@@ -1,38 +1,32 @@
 "use strict";
 
-const inputNames = [
-    "short-name",
-    "name",
-    "favicon",
-    "start-url",
-    "display",
-    "theme-color",
-    "background-color",
-    "cache-name"
-];
+const g_shortName = document.getElementById("short-name");
+const g_name = document.getElementById("name");
+const g_favicon = document.getElementById("favicon");
+const g_startUrl = document.getElementById("start-url");
+const g_display = document.getElementById("display");
+const g_themeColor = document.getElementById("theme-color");
+const g_backgroundColor = document.getElementById("background-color");
+const g_cacheName = document.getElementById("cache-name");
 
-const els = new Map();
-const submitBtn = document.getElementById("submit");
-const status = document.getElementById("status");
+const g_faviconSizes = [192, 512, 545];
+let g_faviconFile = null;
 
-let favicon = null;
+const g_submit = document.getElementById("submit");
+const g_status = document.getElementById("status");
 
-for (let i = 0; i < inputNames.length; ++i) {
-    els.set(inputNames[i], document.getElementById(inputNames[i]));
-}
-
-els.get("favicon").addEventListener("change", (event) => {
+g_favicon.addEventListener("change", (event) => {
     if (event.target.files.length === 1) {
-        favicon = event.target.files[0];
+        g_faviconFile = event.target.files[0];
     }
 });
 
-submitBtn.addEventListener("click", () => {
-    const favicon = els.get("favicon").value;
-    const display = els.get("display").value;
-    if (!favicon || !display) {
-        if (!favicon) {
-            if (!display) {
+g_submit.addEventListener("click", () => {
+    const faviconValue = g_favicon.value;
+    const displayValue = g_display.value;
+    if (!faviconValue || !displayValue) {
+        if (!faviconValue) {
+            if (!displayValue) {
                 setStatus("Please upload favicon and choose display mode");
             } else {
                 setStatus("Please upload favicon");
@@ -41,52 +35,92 @@ submitBtn.addEventListener("click", () => {
             setStatus("Please choose display mode");
         }
     } else {
+        applyDefaultValues();
         generateTemplate();
     }
 });
 
 function setStatus(text) {
-    status.textContent = text;
+    g_status.textContent = text;
+}
+
+function reset() {
+    g_shortName.value = "";
+    g_name.value = "";
+    g_favicon.value = "";
+    g_startUrl.value = "";
+    g_display.value = "";
+    g_themeColor.value = "";
+    g_backgroundColor.value = "";
+    g_cacheName.value = "";
+
+    g_faviconFile = null;
+    
+    setStatus("");
+}
+
+function applyDefaultValues() {
+    g_shortName.value = g_shortName.value || "Default";
+    g_name.value = g_name.value || "Default";
+    g_startUrl.value = g_startUrl.value || "./";
+    g_themeColor.value = g_themeColor.value || "#000000";
+    g_backgroundColor.value = g_backgroundColor.value || "#ffffff";
+    g_cacheName.value = g_cacheName.value || "default-v0";
 }
 
 function generateManifest() {
-    return `{
-	"short_name": "${els.get("short-name")}",
-	"name": "${els.get("name")}",
-	"icons": [
-	{
-		"src": "/favicon-192x192.png",
-		"sizes": "192x192",
-		"type": "image/png"
-	},
-	{
-		"src": "/favicon-512x512.png",
-		"sizes": "512x512",
-		"type": "image/png"
-	}
-	],
-	"start_url": "${els.get("start-url")}",
-	"display": "${els.get("display")}",
-	"theme_color": "${els.get("theme-color")}",
-	"background_color": "${els.get("background-color")}"
+    const shortNameValue = g_shortName.value;
+    const nameValue = g_name.value;
+    const startUrlValue = g_startUrl.value;
+    const displayValue = g_display.value;
+    const themeColorValue = g_themeColor.value;
+    const backgroundColorValue = g_backgroundColor.value;
+    
+    let manifest = `{
+	"short_name": "${shortNameValue}",
+	"name": "${nameValue}",
+	"icons": [`;
+    let first = true;
+    for (const faviconSize of g_faviconSizes) {
+        if (first) {
+            first = false;
+        } else {
+            manifest += `,`
+        }
+
+        manifest += `
+        {
+            "src": "/favicon-${faviconSize}x${faviconSize}.png",
+            "sizes": "${faviconSize}x${faviconSize}",
+            "type": "image/png"
+        }`
+    }
+    manifest += `
+    ],
+	"start_url": "${startUrlValue}",
+	"display": "${displayValue}",
+	"theme_color": "${themeColorValue}",
+	"background_color": "${backgroundColorValue}"
 }`
+    return manifest;
 }
 
 function generateIndex() {
-    const startUrl = els.get("start-url");
+    const nameValue = g_name.value;
+    const startUrlValue = g_startUrl.value;
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${els.get("name")}</title>
+    <title>${nameValue}</title>
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <script>
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("${startUrl}sw.js", {
-                scope: "${startUrl}" 
+            navigator.serviceWorker.register("${startUrlValue}sw.js", {
+                scope: "${startUrlValue}" 
             });
         }
     </script>
@@ -95,18 +129,19 @@ function generateIndex() {
 }
 
 function generateSw() {
-    const startUrl = els.get("start-url");
-    return `const CACHE_NAME = "${els.get("cache-name")}";
+    const startUrlValue = g_startUrl.value;
+    const cacheNameValue = g_cacheName.value;
+    return `const CACHE_NAME = "${cacheNameValue}";
 
 const FILES = [
-    "${startUrl}",
-    "${startUrl}favicon-192x192.png",
-    "${startUrl}favicon-512x512.png",
-    "${startUrl}manifest.json",
-    "${startUrl}sw.js",
-    "${startUrl}index.html",
-    "${startUrl}style.css",
-    "${startUrl}main.js"
+    "${startUrlValue}",
+    "${startUrlValue}favicon-192x192.png",
+    "${startUrlValue}favicon-512x512.png",
+    "${startUrlValue}manifest.json",
+    "${startUrlValue}sw.js",
+    "${startUrlValue}index.html",
+    "${startUrlValue}style.css",
+    "${startUrlValue}main.js"
 ];
 
 self.addEventListener("install", event => {
@@ -139,15 +174,16 @@ function resizeImg(imgBlob, width, height) {
                 resolve(blob);
             }, "image/png");
         }
-    })
+    });
 }
 
 async function generateTemplate() {
-    status.textContent = "Loading...";
+    setStatus("Loading...");
 
     const zip = new JSZip();
-    zip.file("favicon-192x192.png", await resizeImg(favicon, 192, 192));
-    zip.file("favicon-512x512.png", await resizeImg(favicon, 512, 512));
+    for (const faviconSize of g_faviconSizes) {
+        zip.file(`favicon-${faviconSize}x${faviconSize}.png`, await resizeImg(g_faviconFile, faviconSize, faviconSize));
+    }
     zip.file("manifest.json", generateManifest());
     zip.file("sw.js", generateSw());
     zip.file("index.html", generateIndex());
@@ -161,7 +197,8 @@ async function generateTemplate() {
     const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = blobUrl;
-    link.download = `${els.get("name")}.zip`;
+    const nameValue = g_name.value;
+    link.download = `${nameValue}.zip`;
 
     document.body.appendChild(link)
     link.click();
@@ -169,11 +206,5 @@ async function generateTemplate() {
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl)
 
-    favicon = null;
-
-    for (let i = 0; i < inputNames.length; ++i) {
-        els.get(inputNames[i]).value = "";
-    }
-    
-    status.textContent = "";
+    reset();
 }
