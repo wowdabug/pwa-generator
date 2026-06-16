@@ -1,5 +1,28 @@
 "use strict";
 
+const g_ids = [
+    "short-name",
+    "name",
+    "favicon",
+    "start-url",
+    "display",
+    "theme-color",
+    "background-color",
+    "cache-name",
+    "favicon"
+]
+
+const g_info = [
+    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/short_name",
+    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/name",
+    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/start_url",
+    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/display",
+    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/theme_color",
+    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/background_color",
+    "https://developer.mozilla.org/en-US/docs/Web/API/Cache",
+    "https://developer.mozilla.org/en-US/docs/Glossary/Favicon"
+];
+
 const g_files = ["main.js", "style.css"];
 
 const g_shortName = document.getElementById("short-name");
@@ -17,6 +40,10 @@ let g_faviconFile = null;
 const g_submit = document.getElementById("submit");
 const g_status = document.getElementById("status");
 
+const g_manifest = new Map();
+const g_sw = new Map();
+const g_index = new Map();
+
 g_favicon.addEventListener("change", (event) => {
     if (event.target.files.length === 1) {
         g_faviconFile = event.target.files[0];
@@ -27,15 +54,7 @@ g_submit.addEventListener("click", () => {
     const faviconValue = g_favicon.value;
     const displayValue = g_display.value;
     if (!faviconValue || !displayValue) {
-        if (!faviconValue) {
-            if (!displayValue) {
-                setStatus("Please upload favicon and choose display mode");
-            } else {
-                setStatus("Please upload favicon");
-            }
-        } else {
-            setStatus("Please choose display mode");
-        }
+        setStatus("Please upload favicon");
     } else {
         applyDefaultValues();
         generateTemplate();

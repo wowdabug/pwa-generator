@@ -9,7 +9,7 @@
     </head>
     <body>
 		<script>
-            const DEBUG = false;
+            const DEBUG = true;
             if (!DEBUG) {
                 if ("serviceWorker" in navigator) {
                     navigator.serviceWorker.register("./sw.js", {
@@ -19,7 +19,7 @@
             }
 		</script>
         <div id="container">
-            <p>This tool generates a PWA automatically (including favicons)<br>Leaving inputs blank will use the placeholder values</p>
+            <h1>Manifest</h1>
             <label for="short-name" class="tooltip">
                 Short Name
                 <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/short_name" target="_blank">Info</a>
@@ -32,12 +32,6 @@
             </label>
             <input type="text" id="name" placeholder="Default">
             <br>
-            <label for="favicon">
-                Favicon
-                <a href="https://developer.mozilla.org/en-US/docs/Glossary/Favicon" target="_blank">Info</a>
-            </label>
-            <input type="file" id="favicon" accept="image/png">
-            <br>
             <label for="start-url">
                 Start URL
                 <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/start_url" target="_blank">Info</a>
@@ -48,13 +42,7 @@
                 Display
                 <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/display" target="_blank">Info</a>
             </label>
-            <select id="display">
-                <option value="">--Please choose an option--</option>
-                <option value="fullscreen">Fullscreen</option>
-                <option value="standalone">Standalone</option>
-                <option value="minimal-ui">Minimal UI</option>
-                <option value="browser">Browser</option>
-            </select>
+            <input type="text" id="display" placeholder="standalone">
             <br>
             <label for="theme-color">
                 Theme Color
@@ -67,13 +55,25 @@
                 <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/background_color" target="_blank">Info</a>
             </label>
             <input type="text" id="background-color" placeholder="#ffffff">
-            <br>
+            <hr>
+            <h1>Service Worker</h1>
             <label for="cache-name">
                 Cache Name
                 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank">Info</a>
             </label>
             <input type="text" id="cache-name" placeholder="default-v0">
-            <br>
+            <hr>
+            <h1>Index</h1>
+            <label for="title">Title</label>
+            <input type="text" id="title" placeholder="Default" readonly>
+            <hr>
+            <h1>Other</h1>
+            <label for="favicon">
+                Favicon
+                <a href="https://developer.mozilla.org/en-US/docs/Glossary/Favicon" target="_blank">Info</a>
+            </label>
+            <input type="file" id="favicon" accept="image/png">
+            <hr>
             <button id="submit" type="submit">Generate Template</button>
             <p id="status"></p>
             <script src="lib/jszip.js"></script>
