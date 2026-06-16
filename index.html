@@ -20,17 +20,26 @@
 		</script>
         <div id="container">
             <h1>Manifest</h1>
-            <label for="short-name" class="tooltip">
-                Short Name
-                <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/short_name" target="_blank">Info</a>
-            </label>
-            <input type="text" id="short-name" placeholder="Default">
-            <br>
-            <label for="name">
-                Name
-                <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/name" target="_blank">Info</a>
-            </label>
-            <input type="text" id="name" placeholder="Default">
+            <div class="row">
+                <label for="short-name" class="tooltip">
+                    Short Name
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/short_name" target="_blank">Info</a>
+                </label>
+            </div>
+            <div class="row">
+                <input type="checkbox">
+                <input type="text" id="short-name" placeholder="Default">
+            </div>
+            <div class="row">
+                <label for="name">
+                    Name
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/name" target="_blank">Info</a>
+                </label>
+            </div>
+            <div class="row">
+                <input type="checkbox">
+                <input type="text" id="name" placeholder="Default">
+            </div>
             <br>
             <label for="start-url">
                 Start URL

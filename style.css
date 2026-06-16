@@ -20,6 +20,8 @@ body {
     padding: 4px;
     box-sizing: border-box;
     appearance: none;
+    display: flex;
+    flex-direction: column;
 }
 
 p {
@@ -75,6 +77,22 @@ input:focus {
 input[type="text"] {
     color: black;
     background: white;
+    flex: 1;
+}
+
+input[type="checkbox"] {
+    height: 16px;
+    width: 16px;
+    background-color: white;
+}
+
+input[type="checkbox"]:hover {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: skyblue;
 }
 
 input[type="file"] {
@@ -106,4 +124,13 @@ button {
 
 #status {
     margin-top: 16px;
+}
+
+.row {
+    align-items: center;
+    display: flex;
+}
+
+hr {
+    width: 100%;
 }

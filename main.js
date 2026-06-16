@@ -1,19 +1,60 @@
 "use strict";
 
-const g_ids = [
-    "short-name",
-    "name",
-    "favicon",
-    "start-url",
+const g_manifestIds = [
+    "background_color",
+    "categories",
+    "description",
     "display",
-    "theme-color",
-    "background-color",
-    "cache-name",
-    "title",
-    "favicon"
-];
+    "display_override",
+    "file_handlers",
+    "icons",
+    "id",
+    "launch_handler",
+    "name",
+    "note_taking",
+    "orientation",
+    "prefer_related_applications",
+    "protocol_handlers",
+    "related_applications",
+    "scope",
+    "scope_extensions",
+    "screenshots",
+    "serviceworker",
+    "share_target",
+    "short_name",
+    "shortcuts",
+    "start_url",
+    "theme_color"
+]
 
-const g_placeholderValues = [
+const g_manifestNames = [
+    "Background Color",
+    "Categories",
+    "Description",
+    "Display",
+    "Display Override",
+    "File Handlers",
+    "Icons",
+    "ID",
+    "Launch Handler",
+    "Name",
+    "Note Taking",
+    "Orientation",
+    "Prefer Related Applications",
+    "Protocol Handlers",
+    "Related Applications",
+    "Scope",
+    "Scope Extensions",
+    "Screenshots",
+    "Service Worker",
+    "Share Target",
+    "Short Name",
+    "Shortcuts",
+    "Start URL",
+    "theme_color"
+]
+
+const g_manifestPlaceholderValues = [
     "Default",
     "Default",
     "./",
@@ -25,7 +66,7 @@ const g_placeholderValues = [
     ""
 ]
 
-const g_info = [
+const g_manifestInfo = [
     "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/short_name",
     "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/name",
     "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/start_url",
@@ -37,7 +78,12 @@ const g_info = [
     "https://developer.mozilla.org/en-US/docs/Glossary/Favicon"
 ];
 
+for (let i = 0; i < g_manifestIds.length; ++i) {
+    const document.createElement()
+}
+
 const g_files = ["main.js", "style.css"];
+const g_faviconSizes = [192, 512];
 
 const g_shortName = document.getElementById("short-name");
 const g_name = document.getElementById("name");
@@ -48,7 +94,6 @@ const g_themeColor = document.getElementById("theme-color");
 const g_backgroundColor = document.getElementById("background-color");
 const g_cacheName = document.getElementById("cache-name");
 
-const g_faviconSizes = [192, 512];
 let g_faviconFile = null;
 
 const g_submit = document.getElementById("submit");
