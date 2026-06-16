@@ -67,19 +67,23 @@
             <input type="text" id="cache-name" placeholder="default-v0">
             <hr>
             <h1>Other</h1>
+            <label for="default-files">
+                Default Files
+            </label>
+            <input type="text" id="default-files" placeholder="main.js, style.css">
             <label for="favicon">
                 Favicon
                 <a href="https://developer.mozilla.org/en-US/docs/Glossary/Favicon" target="_blank">Info</a>
             </label>
             <input type="file" id="favicon" accept="image/png">
-            <label for="cache-name">
-                Default Files
-            </label>
-            <input type="text" id="default-files" placeholder="main.js, style.css">
-            <label for="cache-name">
+            <label for="favicon-sizes">
                 Favicon Sizes
             </label>
             <input type="text" id="favicon-sizes" placeholder="192, 512">
+            <label for="file-name">
+                File Name
+            </label>
+            <input type="text" id="file-name" placeholder="Default">
             <hr>
             <button id="submit" type="submit">Generate Template</button>
             <script src="lib/jszip.js"></script>
