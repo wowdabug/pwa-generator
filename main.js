@@ -46,7 +46,6 @@ function applyPlaceholderValues() {
         g_backgroundColor.value = g_backgroundColor.value || "#ffffff";
         g_cacheName.value = g_cacheName.value || "default-v0";
         g_defaultFiles.value = g_defaultFiles.value || "main.js, style.css";
-        g_favicon.value = g_favicon.value || "";
         g_faviconSizes.value = g_faviconSizes.value || "192, 512";
         g_fileName.value = g_fileName.value || "Default";
 }
@@ -66,7 +65,6 @@ function reset() {
     g_backgroundColor.value = "";
     g_cacheName.value = "";
     g_defaultFiles.value = "";
-    g_favicon.value = "";
     g_faviconSizes.value = "";
     g_fileName.value = "";
 
@@ -84,7 +82,7 @@ function generateIndex() {
         <title>${g_title.value}</title>
         <link rel="manifest" href="manifest.json">
 `;
-if (g_defaultFiles.value.includes("style.css")) {
+if (g_defaultFilesArr.includes("style.css")) {
     index += `        <link rel="stylesheet" href="style.css">
 `;
 }
@@ -97,7 +95,7 @@ index += `    <body>
             }
         </script>
 `;
-if (g_defaultFiles.value.includes("main.js")) {
+if (g_defaultFilesArr.includes("main.js")) {
     index += `        <script src="main.js"></script>
 `;
 }
@@ -145,7 +143,7 @@ const FILES = [
         sw += `    "${g_startUrl.value}favicon-${faviconSize}x${faviconSize}.png",
 `;
     }
-    for (const defaultFile of g_defaultFiles.value) {
+    for (const defaultFile of g_defaultFilesArr) {
         sw += `    "${g_startUrl.value}${defaultFile}",
 `;
     }
