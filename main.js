@@ -91,7 +91,7 @@ function generateManifest() {
 
         manifest += `
         {
-            "src": "/favicon-${faviconSize}x${faviconSize}.png",
+            "src": "${startUrlValue}favicon-${faviconSize}x${faviconSize}.png",
             "sizes": "${faviconSize}x${faviconSize}",
             "type": "image/png"
         }`

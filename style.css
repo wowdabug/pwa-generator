@@ -4,7 +4,6 @@ html, body {
     height: 100%;
 }
 
-
 body {
     background: #000000;
     box-sizing: border-box;
@@ -20,6 +19,28 @@ body {
     font-family: arial;
     padding: 4px;
     box-sizing: border-box;
+    appearance: none;
+}
+
+#container p {
+    appearance: none;
+    font: inherit;
+    font-size: 16px;
+    color: white;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    padding: 0px;
+}
+
+input,
+select,
+button {
+    appearance: none;
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
 }
 
 #container label {
@@ -28,27 +49,58 @@ body {
 
 #container input {
     margin: 4px;
-    border: 1px solid #111111;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+#container input::placeholder {
+    color: gray;
+}
+
+#container input:focus {
+    outline: none;
 }
 
 #container input[type="text"] {
-    border-radius: 4px;
     color: black;
     background: white;
 }
 
 #container select {
+    margin: 4px;
+    padding: 4px;
     border-radius: 4px;
     color: black;
     background: white;
-    margin: 4px;
-    border: 1px solid #111111;
 }
 
 #container input[type="file"] {
     color: white;
+    padding: 0px;
+}
+
+#container input[type="file"]::file-selector-button {
+    background: white;
+    color: black;
+    border: none;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#container input[type="file"]::file-selector-button:hover {
+    background: gray;
 }
 
 #container button {
     margin: 4px;
+    border-radius: 4px;
+    margin-top: 16px;
+    padding: 4px;
+    color: black;
+    background: white;
+}
+
+#container #status {
+    margin-top: 16px;
 }
