@@ -22,7 +22,7 @@ body {
     appearance: none;
 }
 
-#container p {
+p {
     appearance: none;
     font: inherit;
     font-size: 16px;
@@ -30,6 +30,10 @@ body {
     margin-top: 4px;
     margin-bottom: 16px;
     padding: 0px;
+}
+
+a {
+    color: gray;
 }
 
 input,
@@ -43,43 +47,35 @@ button {
     background: none;
 }
 
-#container label {
+label {
     display: block;
 }
 
-#container input {
+input {
     margin: 4px;
     padding: 4px;
     border-radius: 4px;
 }
 
-#container input::placeholder {
+input::placeholder {
     color: gray;
 }
 
-#container input:focus {
+input:focus {
     outline: none;
 }
 
-#container input[type="text"] {
+input[type="text"] {
     color: black;
     background: white;
 }
 
-#container select {
-    margin: 4px;
-    padding: 4px;
-    border-radius: 4px;
-    color: black;
-    background: white;
-}
-
-#container input[type="file"] {
+input[type="file"] {
     color: white;
     padding: 0px;
 }
 
-#container input[type="file"]::file-selector-button {
+input[type="file"]::file-selector-button {
     background: white;
     color: black;
     border: none;
@@ -88,11 +84,19 @@ button {
     cursor: pointer;
 }
 
-#container input[type="file"]::file-selector-button:hover {
+input[type="file"]::file-selector-button:hover {
     background: gray;
 }
 
-#container button {
+select {
+    margin: 4px;
+    padding: 4px;
+    border-radius: 4px;
+    color: black;
+    background: white;
+}
+
+button {
     margin: 4px;
     border-radius: 4px;
     margin-top: 16px;
@@ -101,6 +105,6 @@ button {
     background: white;
 }
 
-#container #status {
+#status {
     margin-top: 16px;
 }
