@@ -1,107 +1,25 @@
 "use strict";
 
-const g_manifestIds = [
-    "background_color",
-    "categories",
-    "description",
-    "display",
-    "display_override",
-    "file_handlers",
-    "icons",
-    "id",
-    "launch_handler",
-    "name",
-    "note_taking",
-    "orientation",
-    "prefer_related_applications",
-    "protocol_handlers",
-    "related_applications",
-    "scope",
-    "scope_extensions",
-    "screenshots",
-    "serviceworker",
-    "share_target",
-    "short_name",
-    "shortcuts",
-    "start_url",
-    "theme_color"
-]
-
-const g_manifestNames = [
-    "Background Color",
-    "Categories",
-    "Description",
-    "Display",
-    "Display Override",
-    "File Handlers",
-    "Icons",
-    "ID",
-    "Launch Handler",
-    "Name",
-    "Note Taking",
-    "Orientation",
-    "Prefer Related Applications",
-    "Protocol Handlers",
-    "Related Applications",
-    "Scope",
-    "Scope Extensions",
-    "Screenshots",
-    "Service Worker",
-    "Share Target",
-    "Short Name",
-    "Shortcuts",
-    "Start URL",
-    "theme_color"
-]
-
-const g_manifestPlaceholderValues = [
-    "Default",
-    "Default",
-    "./",
-    "standalone",
-    "#000000",
-    "#ffffff",
-    "default-v0",
-    "Default",
-    ""
-]
-
-const g_manifestInfo = [
-    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/short_name",
-    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/name",
-    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/start_url",
-    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/display",
-    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/theme_color",
-    "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/background_color",
-    "https://developer.mozilla.org/en-US/docs/Web/API/Cache",
-    "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/title",
-    "https://developer.mozilla.org/en-US/docs/Glossary/Favicon"
-];
-
-for (let i = 0; i < g_manifestIds.length; ++i) {
-    const document.createElement()
-}
-
-const g_files = ["main.js", "style.css"];
-const g_faviconSizes = [192, 512];
+const g_title = document.getElementById("title");
 
 const g_shortName = document.getElementById("short-name");
 const g_name = document.getElementById("name");
-const g_favicon = document.getElementById("favicon");
 const g_startUrl = document.getElementById("start-url");
 const g_display = document.getElementById("display");
 const g_themeColor = document.getElementById("theme-color");
 const g_backgroundColor = document.getElementById("background-color");
+
 const g_cacheName = document.getElementById("cache-name");
 
-let g_faviconFile = null;
+const g_favicon = document.getElementById("favicon");
+const g_defaultFiles = document.getElementById("default-files");
+const g_faviconSizes = document.getElementById("favicon-sizes");
 
 const g_submit = document.getElementById("submit");
-const g_status = document.getElementById("status");
 
-const g_manifest = new Map();
-const g_sw = new Map();
-const g_index = new Map();
+let g_defaultFilesArr = null;
+let g_faviconSizesArr = null;
+let g_faviconFile = null;
 
 g_favicon.addEventListener("change", (event) => {
     if (event.target.files.length === 1) {
@@ -110,24 +28,25 @@ g_favicon.addEventListener("change", (event) => {
 });
 
 g_submit.addEventListener("click", () => {
-    const faviconValue = g_favicon.value;
-    const displayValue = g_display.value;
-    if (!faviconValue || !displayValue) {
-        setStatus("Please upload favicon");
+    if (!g_favicon.value) {
+        alert("Please upload favicon");
     } else {
+        g_title.value = g_title.value || "Default";
         g_shortName.value = g_shortName.value || "Default";
         g_name.value = g_name.value || "Default";
         g_startUrl.value = g_startUrl.value || "./";
         g_themeColor.value = g_themeColor.value || "#000000";
         g_backgroundColor.value = g_backgroundColor.value || "#ffffff";
         g_cacheName.value = g_cacheName.value || "default-v0";
+        g_defaultFiles.value = g_defaultFiles.value || "main.js, style.css";
+        g_faviconSizes.value = g_faviconSizes.value || "192, 512";
+        g_defaultFilesArr = g_defaultFiles.value.split(",").map(el => el.trim()).filter(el => el !== "");
+        g_faviconSizesArr = g_faviconSizes.value.split(",").map(el => el.trim()).filter(el => el !== "");
+        console.log(g_defaultFilesArr);
+        console.log(g_faviconSizesArr);
         generateTemplate();
     }
 });
-
-function setStatus(text) {
-    g_status.textContent = text;
-}
 
 function reset() {
     g_shortName.value = "";
@@ -140,8 +59,37 @@ function reset() {
     g_cacheName.value = "";
 
     g_faviconFile = null;
-    
-    setStatus("");
+}
+
+function generateIndex() {
+    let index = `<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${g_name.value}</title>
+        <link rel="manifest" href="manifest.json">
+`;
+if (g_files.includes("style.css")) {
+    index += `        <link rel="stylesheet" href="style.css">
+`;
+}
+index += `    <body>
+        <script>
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("${g_startUrl.value}sw.js", {
+                    scope: "${g_startUrl.value}" 
+                });
+            }
+        </script>
+`;
+if (g_files.includes("main.js")) {
+    index += `        <script src="main.js"></script>
+`;
+}
+index += `    </body>
+</html>`;
+    return index;
 }
 
 function generateManifest() {
@@ -156,7 +104,7 @@ function generateManifest() {
 	"name": "${nameValue}",
 	"icons": [`;
     let first = true;
-    for (const faviconSize of g_faviconSizes) {
+    for (const faviconSize of g_faviconSizesArr) {
         if (first) {
             first = false;
         } else {
@@ -180,29 +128,6 @@ function generateManifest() {
     return manifest;
 }
 
-function generateIndex() {
-    const nameValue = g_name.value;
-    const startUrlValue = g_startUrl.value;
-    return `<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${nameValue}</title>
-        <link rel="manifest" href="manifest.json">
-    </head>
-    <body>
-        <script>
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.register("${startUrlValue}sw.js", {
-                    scope: "${startUrlValue}" 
-                });
-            }
-        </script>
-    </body>
-</html>`
-}
-
 function generateSw() {
     const startUrlValue = g_startUrl.value;
     const cacheNameValue = g_cacheName.value;
@@ -210,7 +135,7 @@ function generateSw() {
 
 const FILES = [
 `;
-    for (const faviconSize of g_faviconSizes) {
+    for (const faviconSize of g_faviconSizesArr) {
         sw += `    "${startUrlValue}favicon-${faviconSize}x${faviconSize}.png",
 `;
     }
@@ -258,10 +183,8 @@ function resizeImg(imgBlob, width, height) {
 }
 
 async function generateTemplate() {
-    setStatus("Loading...");
-
     const zip = new JSZip();
-    for (const faviconSize of g_faviconSizes) {
+    for (const faviconSize of g_faviconSizesArr) {
         zip.file(`favicon-${faviconSize}x${faviconSize}.png`, await resizeImg(g_faviconFile, faviconSize, faviconSize));
     }
     zip.file("manifest.json", generateManifest());
