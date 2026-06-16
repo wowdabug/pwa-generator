@@ -9,7 +9,20 @@ const g_ids = [
     "theme-color",
     "background-color",
     "cache-name",
+    "title",
     "favicon"
+];
+
+const g_placeholderValues = [
+    "Default",
+    "Default",
+    "./",
+    "standalone",
+    "#000000",
+    "#ffffff",
+    "default-v0",
+    "Default",
+    ""
 ]
 
 const g_info = [
@@ -20,6 +33,7 @@ const g_info = [
     "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/theme_color",
     "https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/background_color",
     "https://developer.mozilla.org/en-US/docs/Web/API/Cache",
+    "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/title",
     "https://developer.mozilla.org/en-US/docs/Glossary/Favicon"
 ];
 
@@ -56,7 +70,12 @@ g_submit.addEventListener("click", () => {
     if (!faviconValue || !displayValue) {
         setStatus("Please upload favicon");
     } else {
-        applyDefaultValues();
+        g_shortName.value = g_shortName.value || "Default";
+        g_name.value = g_name.value || "Default";
+        g_startUrl.value = g_startUrl.value || "./";
+        g_themeColor.value = g_themeColor.value || "#000000";
+        g_backgroundColor.value = g_backgroundColor.value || "#ffffff";
+        g_cacheName.value = g_cacheName.value || "default-v0";
         generateTemplate();
     }
 });
@@ -78,15 +97,6 @@ function reset() {
     g_faviconFile = null;
     
     setStatus("");
-}
-
-function applyDefaultValues() {
-    g_shortName.value = g_shortName.value || "Default";
-    g_name.value = g_name.value || "Default";
-    g_startUrl.value = g_startUrl.value || "./";
-    g_themeColor.value = g_themeColor.value || "#000000";
-    g_backgroundColor.value = g_backgroundColor.value || "#ffffff";
-    g_cacheName.value = g_cacheName.value || "default-v0";
 }
 
 function generateManifest() {
