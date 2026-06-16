@@ -140,21 +140,21 @@ function generateIndex() {
     const startUrlValue = g_startUrl.value;
     return `<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${nameValue}</title>
-    <link rel="manifest" href="manifest.json">
-</head>
-<body>
-    <script>
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("${startUrlValue}sw.js", {
-                scope: "${startUrlValue}" 
-            });
-        }
-    </script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${nameValue}</title>
+        <link rel="manifest" href="manifest.json">
+    </head>
+    <body>
+        <script>
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("${startUrlValue}sw.js", {
+                    scope: "${startUrlValue}" 
+                });
+            }
+        </script>
+    </body>
 </html>`
 }
 
