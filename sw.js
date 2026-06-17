@@ -1,4 +1,4 @@
-const CACHE_NAME = "pwa-generator-v1";
+const CACHE_NAME = "pwa-generator-v2";
 
 const FILES = [
     "./",
