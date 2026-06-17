@@ -149,7 +149,7 @@ const FILES = [
     }
     sw += `    "${g_startUrl.value}manifest.json",
     "${g_startUrl.value}sw.js",
-    "${g_startUrl.value}index.html",
+    "${g_startUrl.value}index.html"
 ];
 
 self.addEventListener("install", event => {
